@@ -3,8 +3,11 @@
  * @type {import("prettier").Config}
  */
 const config = {
-  plugins: ["prettier-plugin-tailwindcss"],
-  tailwindFunctions: ["clsx"],
+  singleQuote: true,
+  jsxSingleQuote: true,
+  bracketSameLine: true,
+  tailwindFunctions: ['clsx'],
+  plugins: ['prettier-plugin-tailwindcss'],
 };
 
 export default config;
