@@ -6,23 +6,33 @@ import { CardType } from '@/types/card';
 import { shuffleArray } from '@/lib/shuffle';
 
 export default function GameBoard() {
-  // Шаг 1: генерируем и перемешиваем пары
-  const initialCards: CardType[] = shuffleArray(
-    Array.from({ length: 8 }, (_, i) => ({
-      id: i,
-      value: ['🍎', '🍌', '🍇', '🍓', '🍒', '🥝', '🍉', '🍍'][i],
-      isFlipped: false,
-      isMatched: false,
-    })).flatMap((card) => [{ ...card }, { ...card }]), // дублируем
-  );
+  // Генерируем и перемешиваем пары
+  const generate = () =>
+    shuffleArray(
+      Array.from({ length: 8 }, (_, i) => ({
+        id: i,
+        value: ['🍎', '🍌', '🍇', '🍓', '🍒', '🥝', '🍉', '🍍'][i],
+        isFlipped: false,
+        isMatched: false,
+      })).flatMap((card) => [{ ...card }, { ...card }]),
+    );
 
-  const [cards, setCards] = useState<CardType[]>(initialCards);
+  const [cards, setCards] = useState<CardType[]>(generate());
   const [first, setFirst] = useState<number | null>(null);
   const [second, setSecond] = useState<number | null>(null);
   const [disabled, setDisabled] = useState(false);
   const [moves, setMoves] = useState(0);
 
-  // Шаг 2: обработка сравнения
+  // Сброс игры
+  const resetGame = () => {
+    setCards(generate());
+    setMoves(0);
+    setFirst(null);
+    setSecond(null);
+    setDisabled(false);
+  };
+
+  // Обработка сравнения
   useEffect(() => {
     if (first !== null && second !== null) {
       if (first === second) {
@@ -51,14 +61,14 @@ export default function GameBoard() {
             ),
           );
           resetTurn();
-        }, 1000);
+        }, 800);
       }
 
       setMoves((m) => m + 1);
     }
   }, [second]);
 
-  function handleClick(idx: number) {
+  const handleClick = (idx: number) => {
     if (disabled) return;
     if (cards[idx].isFlipped || cards[idx].isMatched) return; // предотвращаем клик  на уже открытые или найденные пары
 
@@ -66,27 +76,27 @@ export default function GameBoard() {
       prev.map((c, i) => (i === idx ? { ...c, isFlipped: true } : c)),
     );
     first === null ? setFirst(idx) : setSecond(idx);
-  }
+  };
 
-  function resetTurn() {
+  const resetTurn = () => {
     setFirst(null);
     setSecond(null);
     setDisabled(false);
-  }
+  };
 
-  // Шаг 3: рендер
   return (
-    <div className='flex flex-col items-center'>
-      <p className='mb-4 text-lg'>Moves: {moves}</p>
-      <div
-        className='
-        grid grid-cols-4 gap-2
-        w-full max-w-lg
-      '>
+    <div className='flex flex-col items-center w-full p-4'>
+      <button
+        onClick={resetGame}
+        className='mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition'>
+        New Game
+      </button>
+      <div className='grid grid-cols-4 gap-3 w-full max-w-md'>
         {cards.map((card, i) => (
           <Card key={i} card={card} onClick={() => handleClick(i)} />
         ))}
       </div>
+      <p className='mb-4 text-lg font-medium'>Ходы: {moves}</p>
     </div>
   );
 }
