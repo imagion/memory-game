@@ -85,13 +85,13 @@ export default function GameBoard() {
   };
 
   return (
-    <div className='flex flex-col items-center w-full p-4'>
+    <div className='flex w-full flex-col items-center p-4'>
       <button
         onClick={resetGame}
-        className='mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition'>
+        className='mb-4 rounded bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700'>
         New Game
       </button>
-      <div className='grid grid-cols-4 gap-3 w-full max-w-md'>
+      <div className='grid w-full max-w-md grid-cols-4 gap-3'>
         {cards.map((card, i) => (
           <Card key={i} card={card} onClick={() => handleClick(i)} />
         ))}

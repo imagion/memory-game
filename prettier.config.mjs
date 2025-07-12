@@ -6,7 +6,8 @@ const config = {
   singleQuote: true,
   jsxSingleQuote: true,
   bracketSameLine: true,
-  tailwindFunctions: ['clsx'],
+  tailwindFunctions: ['clsx', 'cn'],
+  printWidth: 80,
   plugins: ['prettier-plugin-tailwindcss'],
 };
 
