@@ -1,8 +1,12 @@
+const basePath = `/memory-game`;
+
 const nextConfig = {
   output: 'export',
-  basePath: '/memory-game',
-  assetPrefix: '/memory-game',
+  basePath: basePath,
   images: { unoptimized: true },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
 };
 
 export default nextConfig;

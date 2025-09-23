@@ -11,6 +11,10 @@ interface Props {
 export default function Card({ card, onClick }: Props) {
   const { isFlipped, isMatched, value } = card;
 
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const lightPatternUrl = `${basePath}/pattern.svg`;
+  const darkPatternUrl = `${basePath}/pattern-dark.svg`;
+
   return (
     <div
       onClick={onClick}
@@ -26,7 +30,14 @@ export default function Card({ card, onClick }: Props) {
         </div>
 
         {/* Рубашка */}
-        <div className='absolute inset-0 flex items-center justify-center rounded border-2 border-gray-300 bg-[url(/pattern.svg)] bg-[length:50%_50%] bg-repeat text-transparent shadow-md backface-hidden dark:border-zinc-600 dark:bg-blue-400 dark:bg-[url(/pattern-dark.svg)]'></div>
+        <div
+          className='absolute inset-0 flex items-center justify-center rounded border-2 border-gray-300 bg-[image:var(--bg-pattern-light)] bg-[length:50%_50%] bg-repeat text-transparent shadow-md backface-hidden dark:border-zinc-600 dark:bg-blue-400 dark:bg-[image:var(--bg-pattern-dark)]'
+          style={
+            {
+              '--bg-pattern-light': `url(${lightPatternUrl})`,
+              '--bg-pattern-dark': `url(${darkPatternUrl})`,
+            } as React.CSSProperties
+          }></div>
       </div>
     </div>
   );
